@@ -3,7 +3,7 @@ package raf.sk.sk_user_service.service.impl;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import raf.sk.sk_user_service.dto.interaction.CreateUserRequest;
+import raf.sk.sk_user_service.dto.request.CreateUserRequest;
 import raf.sk.sk_user_service.dto.model.UserDto;
 import raf.sk.sk_user_service.entity_model.Admin;
 import raf.sk.sk_user_service.entity_model.User;
@@ -12,7 +12,6 @@ import raf.sk.sk_user_service.object_mapper.UserDtoMapper;
 import raf.sk.sk_user_service.repository.AdminRepository;
 import raf.sk.sk_user_service.repository.UserRepository;
 import raf.sk.sk_user_service.service.api.AdminServiceApi;
-import raf.sk.sk_user_service.service.api.PasswordHashingServiceApi;
 
 import java.util.Optional;
 
@@ -57,6 +56,23 @@ public class AdminService implements AdminServiceApi {
         admin = adminRepository.save(admin);
 
         return UserDtoMapper.userToDto(admin);
+    }
+
+    @Override
+    public boolean setDisabled(long userId, boolean isDisabled) {
+
+        switch (userRepository.setDisabledState(userId, isDisabled)) {
+            case 1 -> {
+                return isDisabled;
+            }
+            case 0 -> throw new RuntimeException("User with an id " + userId + " has not been found...");
+
+            default ->
+                    throw new RuntimeException("Case of multiple users with id + " + userId + " shouldn't happen... 0,o'");
+        }
+
+
+
     }
 
 }

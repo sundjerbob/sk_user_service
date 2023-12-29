@@ -1,4 +1,4 @@
-package raf.sk.sk_user_service.dto.interaction;
+package raf.sk.sk_user_service.dto.response;
 
 import raf.sk.sk_user_service.dto.model.UserDto;
 public class CreateUserResponse {

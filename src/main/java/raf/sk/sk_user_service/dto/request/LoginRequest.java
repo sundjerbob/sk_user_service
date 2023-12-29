@@ -1,4 +1,4 @@
-package raf.sk.sk_user_service.dto.interaction;
+package raf.sk.sk_user_service.dto.request;
 
 public class LoginRequest {
 

@@ -3,7 +3,7 @@ package raf.sk.sk_user_service.service.impl;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import raf.sk.sk_user_service.dto.interaction.CreateUserRequest;
+import raf.sk.sk_user_service.dto.request.CreateUserRequest;
 import raf.sk.sk_user_service.dto.model.UserDto;
 import raf.sk.sk_user_service.entity_model.Client;
 import raf.sk.sk_user_service.entity_model.MemberCard;
@@ -13,7 +13,6 @@ import raf.sk.sk_user_service.object_mapper.UserDtoMapper;
 import raf.sk.sk_user_service.repository.ClientRepository;
 import raf.sk.sk_user_service.repository.UserRepository;
 import raf.sk.sk_user_service.service.api.ClientServiceApi;
-import raf.sk.sk_user_service.service.api.PasswordHashingServiceApi;
 
 import java.util.Optional;
 

@@ -3,7 +3,7 @@ package raf.sk.sk_user_service.runner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import raf.sk.sk_user_service.dto.interaction.CreateUserRequest;
+import raf.sk.sk_user_service.dto.request.CreateUserRequest;
 import raf.sk.sk_user_service.enumeration.Role;
 import raf.sk.sk_user_service.service.api.AdminServiceApi;
 

@@ -1,7 +1,6 @@
 package raf.sk.sk_user_service.object_mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import raf.sk.sk_user_service.dto.interaction.CreateUserRequest;
+import raf.sk.sk_user_service.dto.request.CreateUserRequest;
 import raf.sk.sk_user_service.dto.model.AdminDto;
 import raf.sk.sk_user_service.dto.model.GymManagerDto;
 import raf.sk.sk_user_service.dto.model.ClientDto;
