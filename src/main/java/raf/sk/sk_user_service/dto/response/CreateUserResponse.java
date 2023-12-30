@@ -9,6 +9,7 @@ public class CreateUserResponse {
         this.created = created;
     }
 
-
-
+    public UserDto getCreated() {
+        return created;
+    }
 }

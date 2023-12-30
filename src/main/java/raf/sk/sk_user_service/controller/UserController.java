@@ -9,6 +9,7 @@ import raf.sk.sk_user_service.dto.request.LoginRequest;
 import raf.sk.sk_user_service.dto.response.LoginResponse;
 import raf.sk.sk_user_service.dto.request.UpdateUserRequest;
 import raf.sk.sk_user_service.dto.model.UserDto;
+import raf.sk.sk_user_service.dto.response.UpdateUserResponse;
 import raf.sk.sk_user_service.service.api.UserServiceApi;
 
 @RestController
@@ -23,22 +24,24 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(LoginRequest loginRequest) {
-        return new ResponseEntity<>(userService.authenticate(loginRequest), HttpStatus.OK);
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+        LoginResponse loginResponse = userService.authenticate(loginRequest);
+        return new ResponseEntity<>(loginResponse, loginResponse != null ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
     @GetMapping
-    //@Authorization(roles = {"ADMIN"})
     public ResponseEntity<Page<UserDto>> getAllUsers(
-            //    @RequestHeader("Authorization") String authorization,
+            @RequestHeader("Authorization") String authorization,
             Pageable pageable) {
         return new ResponseEntity<>(userService.getUsers(pageable), HttpStatus.OK);
     }
 
-    @PutMapping("/{userId}")
+    @PutMapping("/{userId}/update")
     //@Authorization(roles = {"ADMIN", "CLIENT"})
-    public ResponseEntity<UserDto> updateUser(@PathVariable("userId") Long userId, @RequestBody UpdateUserRequest updateDto) {
-        return new ResponseEntity<>(userService.updateUser(updateDto, userId), HttpStatus.OK);
+    public ResponseEntity<UpdateUserResponse> updateUser(@RequestHeader("Authorization") String authorization,
+                                                         @PathVariable("userId") Long userId,
+                                                         @RequestBody UpdateUserRequest updateDto) {
+        return new ResponseEntity<>(userService.updateUser(userId, updateDto), HttpStatus.OK);
     }
 
 

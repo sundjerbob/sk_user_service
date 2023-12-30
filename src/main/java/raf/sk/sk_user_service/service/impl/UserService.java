@@ -9,15 +9,17 @@ import raf.sk.sk_user_service.dto.request.LoginRequest;
 import raf.sk.sk_user_service.dto.response.LoginResponse;
 import raf.sk.sk_user_service.dto.request.UpdateUserRequest;
 import raf.sk.sk_user_service.dto.model.UserDto;
+import raf.sk.sk_user_service.dto.response.UpdateUserResponse;
 import raf.sk.sk_user_service.entity_model.User;
 import raf.sk.sk_user_service.object_mapper.UserDtoMapper;
 import raf.sk.sk_user_service.repository.UserRepository;
-import raf.sk.sk_user_service.service.api.JWTServiceApi;
+import raf.sk.sk_user_service.jwt.JWTServiceApi;
 import raf.sk.sk_user_service.service.api.UserServiceApi;
 
 import java.util.Optional;
 
-import static raf.sk.sk_user_service.hash.PasswordHashingUtil.matchPasswords;
+import static raf.sk.sk_user_service.object_mapper.UserDtoMapper.userToDto;
+import static raf.sk.sk_user_service.util.PasswordHashingUtil.matchRawAndHashed;
 
 
 @Service
@@ -41,7 +43,7 @@ public class UserService implements UserServiceApi {
 
 
     @Override
-    public UserDto updateUser(UpdateUserRequest updateState, long id) {
+    public UpdateUserResponse updateUser(long id, UpdateUserRequest updateState) {
 
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id: " + id + " couldn't be found..."));
 
@@ -57,29 +59,34 @@ public class UserService implements UserServiceApi {
         if (!user.getLastName().equals(updateState.getLastName()))
             user.setLastName(updateState.getLastName());
 
-        userRepository.save(user);
-        return null;
+        user = userRepository.save(user);
+
+        return new UpdateUserResponse(userToDto(user));
     }
 
     @Override
     public LoginResponse authenticate(LoginRequest loginRequest) {
+        String usernameToAuthenticate = loginRequest.getUsername();
+        System.out.println("Attempting authentication for username: " + usernameToAuthenticate);
 
-        Optional<User> userOptional = userRepository.findByUsername(loginRequest.getUsername());
+        Optional<User> userOptional = userRepository.findByUsername(usernameToAuthenticate);
 
         if (userOptional.isPresent()) {
-
             User user = userOptional.get();
 
             // Verify the hashed password
-            if (matchPasswords(loginRequest.getPassword(), user.getPassword())) {
+            if (matchRawAndHashed(loginRequest.getPassword(), user.getPassword())) {
                 // Passwords match, proceed with authentication and token generation
                 return new LoginResponse().setJwt(jwtService.generateJWT(user));
             }
+            System.out.println("Password does not match for username: " + usernameToAuthenticate);
         }
 
         // Authentication failed
         return null;
     }
+
+
 
 
 }

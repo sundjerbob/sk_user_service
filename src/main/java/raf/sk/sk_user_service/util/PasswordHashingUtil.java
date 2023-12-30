@@ -1,4 +1,4 @@
-package raf.sk.sk_user_service.hash;
+package raf.sk.sk_user_service.util;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -14,18 +14,7 @@ public class PasswordHashingUtil {
             byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
 
             // Step 3: Convert the byte array to a hexadecimal string
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hash) {
-                // Convert each byte of the hash to a two-character hexadecimal representation
-                String hex = Integer.toHexString(0xff & b);
-
-                // Step 4: Ensure that each byte is represented by two characters
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-
-                hexString.append(hex);
-            }
+            StringBuilder hexString = getStringBuilder(hash);
 
             // Step 5: Return the hexadecimal representation of the hash
             return hexString.toString();
@@ -36,7 +25,26 @@ public class PasswordHashingUtil {
         }
     }
 
-    public static boolean matchPasswords(String rawPassword, String hashedPassword) {
+    private static StringBuilder getStringBuilder(byte[] hash) {
+
+        StringBuilder hexString = new StringBuilder();
+
+        for (byte b : hash) {
+            // Convert each byte of the hash to a two-character hexadecimal representation
+            String hex = Integer.toHexString(0xff & b);
+
+            // Step 4: Ensure that each byte is represented by two characters
+            if (hex.length() == 1) {
+                // adding 0 at the beginning has no "weight" to byte value, but ensures format is at least 2 digits/bits.
+                hexString.append('0');
+            }
+
+            hexString.append(hex);
+        }
+        return hexString;
+    }
+
+    public static boolean matchRawAndHashed(String rawPassword, String hashedPassword) {
 
         return hashPassword(rawPassword).equals(hashedPassword);
 

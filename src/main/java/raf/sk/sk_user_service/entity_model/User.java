@@ -15,7 +15,7 @@ public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
@@ -29,6 +29,7 @@ public abstract class User {
 
     @Column(name = "first_name")
     protected String firstName;
+
     @Column(name = "last_name")
     protected String lastName;
 

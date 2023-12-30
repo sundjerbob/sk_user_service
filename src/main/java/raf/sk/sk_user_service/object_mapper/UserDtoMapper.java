@@ -37,7 +37,7 @@ public class UserDtoMapper {
                                     .role(user.getRole()))
 
                     .gymName(((GymManager) user).getGymName())
-                    .setDateOfEmployment(((GymManager) user).getDateOfEmployment().toString())
+                    //.setDateOfEmployment(((GymManager) user).getDateOfEmployment().toString())
                     .build();
 
 

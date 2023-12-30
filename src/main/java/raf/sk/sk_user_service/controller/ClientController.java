@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import raf.sk.sk_user_service.dto.request.CreateUserRequest;
 import raf.sk.sk_user_service.dto.model.UserDto;
+import raf.sk.sk_user_service.dto.response.CreateUserResponse;
 import raf.sk.sk_user_service.service.api.ClientServiceApi;
 
 @RestController
@@ -21,10 +22,8 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> createClient(@RequestBody CreateUserRequest createUserRequest) {
+    public ResponseEntity<CreateUserResponse> createClient(@RequestBody CreateUserRequest createUserRequest) {
 
-        System.out.println("ALIJA BALIJA NAJJJ");
-        UserDto newUser = clientService.createClient(createUserRequest);
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        return new ResponseEntity<>(clientService.createClient(createUserRequest), HttpStatus.CREATED);
     }
 }

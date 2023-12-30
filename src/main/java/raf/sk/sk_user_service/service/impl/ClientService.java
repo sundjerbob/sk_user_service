@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raf.sk.sk_user_service.dto.request.CreateUserRequest;
 import raf.sk.sk_user_service.dto.model.UserDto;
+import raf.sk.sk_user_service.dto.response.CreateUserResponse;
 import raf.sk.sk_user_service.entity_model.Client;
 import raf.sk.sk_user_service.entity_model.MemberCard;
 import raf.sk.sk_user_service.entity_model.User;
@@ -16,7 +17,7 @@ import raf.sk.sk_user_service.service.api.ClientServiceApi;
 
 import java.util.Optional;
 
-import static raf.sk.sk_user_service.hash.PasswordHashingUtil.hashPassword;
+import static raf.sk.sk_user_service.util.PasswordHashingUtil.hashPassword;
 import static raf.sk.sk_user_service.object_mapper.UserDtoMapper.createReqToUser;
 
 
@@ -35,7 +36,7 @@ public class ClientService implements ClientServiceApi {
 
     @Override
     @Transactional
-    public UserDto createClient(@Valid CreateUserRequest createUserRequest) {
+    public CreateUserResponse createClient(@Valid CreateUserRequest createUserRequest) {
 
         if (createUserRequest.getRole() != Role.CLIENT)
             throw new RuntimeException("Invalid body for create client...");
@@ -64,7 +65,7 @@ public class ClientService implements ClientServiceApi {
         client.addMemberCard(new MemberCard());
         client = clientRepository.save(client);
 
-        return UserDtoMapper.userToDto(client);
+        return new CreateUserResponse(UserDtoMapper.userToDto(client));
 
     }
 }

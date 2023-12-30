@@ -1,0 +1,36 @@
+
+***** UserController *****
+
+- \\\\ method ////             \\\\ path ////
+----------------------------------------------------------------------------------------------------*
+- <[ getUsers(Pageable) ]> -                                                                        |
+                                                                                                    |
+    GET http://localhost:8080/api/users?page=0&size=10                                              |
+                                                                                                    |
+----------------------------------------------------------------------------------------------------*
+- <[ login(LoginRequest)]> -                                                                        |
+                                                                                                    |
+   POST http://localhost:8080/api/users/login                                                       |
+   "Content-Type: application/json"                                                                 |
+   /r/n/r/n                                                                                         |
+   {                                                                                                |
+      "username": "your_username",                                                                  |
+      "password": "your_password"                                                                   |
+   }                                                                                                |
+----------------------------------------------------------------------------------------------------*
+- <[ updateUser(UpdateUserRequest) ]> -                                                             |
+                                                                                                    |
+  example: {userId} = 3 >-------------V                                                             |
+  PUT http://localhost:8080/api/users/3/update                                                      |
+   /r/n/r/n                                                                                         |
+  {                                                                                                 |
+    "email": "micajlo@gmail.com",                                                                   |
+    "username": "cacajlo",                                                                          |
+    "firstName": "mihajlo",                                                                         |
+    "lastName": "Randjelovic",                                                                      |
+    "dateOfBirth": "1956-02-24"                                                                     |
+  }                                                                                                 |
+-----------------------------------------------------------------------------------------------------
+
+
+***** UserController *****
