@@ -15,15 +15,13 @@ import static raf.sk.sk_user_service.authorization.perm.Permissions.*;
 @Component
 public class AccessAllowanceUnit {
 
-    private final UserRepository userRepository;
 
     private final JWTServiceApi jwtServiceApi;
 
     private final Map<Permissions, PermitLambda> permissionChecks;
 
 
-    public AccessAllowanceUnit(UserRepository userRepository, JWTServiceApi jwtServiceApi) {
-        this.userRepository = userRepository;
+    public AccessAllowanceUnit(JWTServiceApi jwtServiceApi) {
         this.jwtServiceApi = jwtServiceApi;
 
         permissionChecks = new HashMap<>();
@@ -39,13 +37,13 @@ public class AccessAllowanceUnit {
     public boolean allowAction(String requesterClaimsToken, Long requestedRecordId, String[] requiredPermissions) {
 
         // Unpack the requester claims using jwtServiceApi
-        UnpackedAuthToken requesterInfo = jwtServiceApi.unpackClaimsInfo(requesterClaimsToken);
+        UnpackedAuthToken requesterClaims = jwtServiceApi.unpackClaimsInfo(requesterClaimsToken);
 
         // perform supported access permission checks for requiredPermissions
         for (String reqPerm : requiredPermissions) {
 
             // if access permission check grants access the action is allowed
-            if (permissionChecks.get(Permissions.valueOf(reqPerm)).grantAccess())
+            if (permissionChecks.get(Permissions.valueOf(reqPerm)).grantAccess(requesterClaims, requestedRecordId))
                 return true;
         }
 
