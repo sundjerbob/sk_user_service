@@ -1,4 +1,4 @@
-package raf.sk.sk_user_service.anotation;
+package raf.sk.sk_user_service.authorization.anotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

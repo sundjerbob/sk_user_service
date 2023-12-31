@@ -13,7 +13,7 @@ import raf.sk.sk_user_service.dto.response.UpdateUserResponse;
 import raf.sk.sk_user_service.entity_model.User;
 import raf.sk.sk_user_service.object_mapper.UserDtoMapper;
 import raf.sk.sk_user_service.repository.UserRepository;
-import raf.sk.sk_user_service.jwt.JWTServiceApi;
+import raf.sk.sk_user_service.authorization.service.JWTServiceApi;
 import raf.sk.sk_user_service.service.api.UserServiceApi;
 
 import java.util.Optional;

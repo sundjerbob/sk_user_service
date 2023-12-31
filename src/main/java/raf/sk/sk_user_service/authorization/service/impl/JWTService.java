@@ -1,10 +1,10 @@
-package raf.sk.sk_user_service.jwt.impl;
+package raf.sk.sk_user_service.authorization.service.impl;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import raf.sk.sk_user_service.entity_model.User;
-import raf.sk.sk_user_service.jwt.JWTServiceApi;
+import raf.sk.sk_user_service.authorization.service.JWTServiceApi;
 
 import java.util.Date;
 import java.util.HashMap;

@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
-import raf.sk.sk_user_service.enumeration.Role;
+import raf.sk.sk_user_service.entity_model.Role;
 
 import java.time.LocalDate;
 

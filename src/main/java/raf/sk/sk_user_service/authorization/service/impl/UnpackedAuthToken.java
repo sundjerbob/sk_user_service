@@ -1,6 +1,6 @@
-package raf.sk.sk_user_service.jwt.impl;
+package raf.sk.sk_user_service.authorization.service.impl;
 
-import raf.sk.sk_user_service.enumeration.Role;
+import raf.sk.sk_user_service.entity_model.Role;
 
 import java.util.Date;
 
@@ -8,6 +8,8 @@ public class UnpackedAuthToken {
 
     private String requesterUsername;
     private Role requesterRole;
+
+    private long requesterId;
 
     private Date sessionStartTime;
 
@@ -30,9 +32,10 @@ public class UnpackedAuthToken {
         return sessionEndTime;
     }
 
-    private UnpackedAuthToken(String requesterUsername, Object requesterRole, Date sessionStartTime, Date sessionEndTime) {
+    private UnpackedAuthToken(String requesterUsername, Object requesterRole, long requesterId, Date sessionStartTime, Date sessionEndTime) {
         this.requesterUsername = requesterUsername;
         this.requesterRole = requesterRole instanceof Role ? (Role) requesterRole : Role.valueOf((String) requesterRole);
+        this.requesterId = requesterId;
         this.sessionStartTime = sessionStartTime;
         this.sessionEndTime = sessionEndTime;
 
@@ -45,16 +48,18 @@ public class UnpackedAuthToken {
 
         private Object requesterRole;
 
+        private long requesterId;
         private Date sessionStartTime;
 
         private Date sessionEndTime;
+
 
         public Builder() {
 
         }
 
         public UnpackedAuthToken build() {
-            return new UnpackedAuthToken(requesterUsername, requesterRole, sessionStartTime, sessionEndTime);
+            return new UnpackedAuthToken(requesterUsername, requesterRole, requesterId, sessionStartTime, sessionEndTime);
         }
 
         public Builder setRequesterUsername(String requesterUsername) {
@@ -64,6 +69,11 @@ public class UnpackedAuthToken {
 
         public Builder setRequesterRole(Role requesterRole) {
             this.requesterRole = requesterRole;
+            return this;
+        }
+
+        public Builder setRequesterId(long requesterId) {
+            this.requesterId = requesterId;
             return this;
         }
 

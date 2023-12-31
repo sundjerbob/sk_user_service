@@ -1,4 +1,4 @@
-package raf.sk.sk_user_service.enumeration;
+package raf.sk.sk_user_service.authorization;
 
 public enum Permissions {
 

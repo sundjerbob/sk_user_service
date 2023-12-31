@@ -7,7 +7,7 @@ import raf.sk.sk_user_service.dto.request.CreateUserRequest;
 import raf.sk.sk_user_service.dto.model.UserDto;
 import raf.sk.sk_user_service.entity_model.Admin;
 import raf.sk.sk_user_service.entity_model.User;
-import raf.sk.sk_user_service.enumeration.Role;
+import raf.sk.sk_user_service.entity_model.Role;
 import raf.sk.sk_user_service.object_mapper.UserDtoMapper;
 import raf.sk.sk_user_service.repository.AdminRepository;
 import raf.sk.sk_user_service.repository.UserRepository;
