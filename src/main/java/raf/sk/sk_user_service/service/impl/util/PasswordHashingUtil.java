@@ -1,4 +1,4 @@
-package raf.sk.sk_user_service.util;
+package raf.sk.sk_user_service.service.impl.util;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

@@ -1,7 +1,7 @@
 package raf.sk.sk_user_service.entity_model;
 
 
-import raf.sk.sk_user_service.authorization.Permissions;
+import raf.sk.sk_user_service.authorization.perm.Permissions;
 
 import java.util.List;
 

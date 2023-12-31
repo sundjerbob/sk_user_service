@@ -1,10 +1,10 @@
-package raf.sk.sk_user_service.authorization.service.impl;
+package raf.sk.sk_user_service.authorization.jwt_service.impl;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import raf.sk.sk_user_service.entity_model.User;
-import raf.sk.sk_user_service.authorization.service.JWTServiceApi;
+import raf.sk.sk_user_service.authorization.jwt_service.JWTServiceApi;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -65,7 +65,7 @@ public class JWTService implements JWTServiceApi {
         return null;
     }
 
-    public UnpackedAuthToken unpackAuthInfo(String webAuthToken) {
+    public UnpackedAuthToken unpackClaimsInfo(String webAuthToken) {
 
         Claims claims = parseJWT(webAuthToken);
 
@@ -79,7 +79,7 @@ public class JWTService implements JWTServiceApi {
                         .setSessionEndTime(claims.getExpiration())
                         .build();
 
-        if((new Date()).after(unpackedAuthToken.getSessionEnd()))
+        if ((new Date()).after(unpackedAuthToken.getSessionEnd()))
             throw new RuntimeException("Authorization token expired, please login.");
 
         return unpackedAuthToken;

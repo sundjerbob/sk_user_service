@@ -1,4 +1,4 @@
-package raf.sk.sk_user_service.authorization.service.impl;
+package raf.sk.sk_user_service.authorization.jwt_service.impl;
 
 import raf.sk.sk_user_service.entity_model.Role;
 

@@ -1,6 +1,6 @@
 package raf.sk.sk_user_service.authorization.anotation;
 
-public @interface RequestedRecord {
+public @interface RequestedRecordId {
 
     long id();
 

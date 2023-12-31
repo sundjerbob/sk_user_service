@@ -16,7 +16,7 @@ import raf.sk.sk_user_service.service.api.ClientServiceApi;
 
 import java.util.Optional;
 
-import static raf.sk.sk_user_service.util.PasswordHashingUtil.hashPassword;
+import static raf.sk.sk_user_service.service.impl.util.PasswordHashingUtil.hashPassword;
 import static raf.sk.sk_user_service.object_mapper.UserDtoMapper.createReqToUser;
 
 

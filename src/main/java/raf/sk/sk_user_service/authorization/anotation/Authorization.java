@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Authorization {
 
-    String[] requiredPermissions() default {};
+    String[] requiredPermissions() default {"ALL_USER_DATA_ACCESS"};
 
     String authTokenArgName() default "authorization";
 
