@@ -1,4 +1,4 @@
-package raf.sk.sk_user_service.authorization.jwt_service.impl;
+package raf.sk.sk_user_service.authorization.jwt_service.dto;
 
 import raf.sk.sk_user_service.entity_model.Role;
 
@@ -8,13 +8,40 @@ public class UnpackedAuthToken {
 
     private String requesterUsername;
     private Role requesterRole;
-
     private long requesterId;
 
     private Date sessionStartTime;
 
     private Date sessionEndTime;
 
+    private boolean disabled;
+
+
+    private UnpackedAuthToken(String requesterUsername,
+                              Object requesterRole,
+                              long requesterId,
+                              Date sessionStartTime,
+                              Date sessionEndTime,
+                              boolean disabled) {
+        this.requesterUsername = requesterUsername;
+        this.requesterRole = requesterRole instanceof Role ? (Role) requesterRole : Role.valueOf((String) requesterRole);
+        this.requesterId = requesterId;
+        this.sessionStartTime = sessionStartTime;
+        this.sessionEndTime = sessionEndTime;
+        this.disabled = disabled;
+    }
+
+    @Override
+    public String toString() {
+        return "UnpackedAuthToken{" +
+                "requesterUsername='" + requesterUsername + '\'' +
+                ", requesterRole=" + requesterRole +
+                ", requesterId=" + requesterId +
+                ", sessionStartTime=" + sessionStartTime +
+                ", sessionEndTime=" + sessionEndTime +
+                ", disabled=" + disabled +
+                '}';
+    }
 
     public String getRequesterUsername() {
         return requesterUsername;
@@ -22,6 +49,10 @@ public class UnpackedAuthToken {
 
     public Role getRequesterRole() {
         return requesterRole;
+    }
+
+    public long getRequesterId() {
+        return requesterId;
     }
 
     public Date getSessionStart() {
@@ -32,14 +63,9 @@ public class UnpackedAuthToken {
         return sessionEndTime;
     }
 
-    private UnpackedAuthToken(String requesterUsername, Object requesterRole, long requesterId, Date sessionStartTime, Date sessionEndTime) {
-        this.requesterUsername = requesterUsername;
-        this.requesterRole = requesterRole instanceof Role ? (Role) requesterRole : Role.valueOf((String) requesterRole);
-        this.requesterId = requesterId;
-        this.sessionStartTime = sessionStartTime;
-        this.sessionEndTime = sessionEndTime;
 
-
+    public boolean isDisabled() {
+        return disabled;
     }
 
     public static class Builder {
@@ -53,13 +79,16 @@ public class UnpackedAuthToken {
 
         private Date sessionEndTime;
 
+        private boolean disabled;
+
 
         public Builder() {
 
         }
 
         public UnpackedAuthToken build() {
-            return new UnpackedAuthToken(requesterUsername, requesterRole, requesterId, sessionStartTime, sessionEndTime);
+            return new UnpackedAuthToken(requesterUsername, requesterRole, requesterId, sessionStartTime,
+                    sessionEndTime, disabled);
         }
 
         public Builder setRequesterUsername(String requesterUsername) {
@@ -77,8 +106,8 @@ public class UnpackedAuthToken {
             return this;
         }
 
-        public Builder setRequesterRole(String requesterRole) {
-            this.requesterRole = requesterRole;
+        public Builder setDisabled(boolean disabled) {
+            this.disabled = disabled;
             return this;
         }
 

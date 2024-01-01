@@ -1,7 +1,7 @@
-package raf.sk.sk_user_service.authorization.jwt_service;
+package raf.sk.sk_user_service.authorization.jwt_service.api;
 
 import raf.sk.sk_user_service.entity_model.User;
-import raf.sk.sk_user_service.authorization.jwt_service.impl.UnpackedAuthToken;
+import raf.sk.sk_user_service.authorization.jwt_service.dto.UnpackedAuthToken;
 
 
 public interface JWTServiceApi {

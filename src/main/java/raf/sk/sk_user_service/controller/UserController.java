@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import raf.sk.sk_user_service.authorization.anotation.Authorization;
+import raf.sk.sk_user_service.authorization.anotation.RequestedRecordIdentifier;
 import raf.sk.sk_user_service.dto.request.LoginRequest;
 import raf.sk.sk_user_service.dto.response.LoginResponse;
 import raf.sk.sk_user_service.dto.request.UpdateUserRequest;
@@ -29,6 +31,7 @@ public class UserController {
         return new ResponseEntity<>(loginResponse, loginResponse != null ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
+    @Authorization(requiredPermissions = "ALL_USER_DATA_ACCESS", authTokenArgName = "authorization")
     @GetMapping
     public ResponseEntity<Page<UserDto>> getAllUsers(
             @RequestHeader("Authorization") String authorization,
@@ -36,8 +39,13 @@ public class UserController {
         return new ResponseEntity<>(userService.getUsers(pageable), HttpStatus.OK);
     }
 
+
+    @Authorization(
+            requiredPermissions = {"ALL_USER_DATA_ACCESS", "PERSONAL_USER_DATA_ACCESS"},
+            authTokenArgName = "authorization"
+    )
+    @RequestedRecordIdentifier(argName = "userId")
     @PutMapping("/{userId}/update")
-    //@Authorization(roles = {"ADMIN", "CLIENT"})
     public ResponseEntity<UpdateUserResponse> updateUser(@RequestHeader("Authorization") String authorization,
                                                          @PathVariable("userId") Long userId,
                                                          @RequestBody UpdateUserRequest updateDto) {

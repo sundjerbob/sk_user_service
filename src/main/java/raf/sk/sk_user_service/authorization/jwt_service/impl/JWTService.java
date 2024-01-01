@@ -3,8 +3,10 @@ package raf.sk.sk_user_service.authorization.jwt_service.impl;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import raf.sk.sk_user_service.authorization.jwt_service.dto.UnpackedAuthToken;
+import raf.sk.sk_user_service.entity_model.Role;
 import raf.sk.sk_user_service.entity_model.User;
-import raf.sk.sk_user_service.authorization.jwt_service.JWTServiceApi;
+import raf.sk.sk_user_service.authorization.jwt_service.api.JWTServiceApi;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -27,14 +29,14 @@ public class JWTService implements JWTServiceApi {
 
         Claims claims = Jwts.claims()
                 .setIssuer(user.getUsername())
+                .setId(user.getId().toString())
                 .setIssuedAt(issuedAt)
-                .setExpiration(expiresAt)
-                .setId(user.getId().toString());
+                .setExpiration(expiresAt);
 
-        Map<String, Object> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
 
         map.put("role", user.getRole().name());
-        map.put("status", user.isDisabled() ? "DEACTIVATED" : "ACTIVE");
+        map.put("status", user.isDisabled() ? "ACTIVE" : "DEACTIVATED");
 
         claims.putAll(map);
 
@@ -75,6 +77,9 @@ public class JWTService implements JWTServiceApi {
         UnpackedAuthToken unpackedAuthToken =
                 new UnpackedAuthToken.Builder()
                         .setRequesterUsername(claims.getIssuer())
+                        .setRequesterId(Long.parseLong(claims.getId()))
+                        .setRequesterRole(Role.valueOf((String) claims.get("role")))
+                        .setDisabled(claims.get("status").equals("DEACTIVATED"))
                         .setSessionStartTime(claims.getIssuedAt())
                         .setSessionEndTime(claims.getExpiration())
                         .build();

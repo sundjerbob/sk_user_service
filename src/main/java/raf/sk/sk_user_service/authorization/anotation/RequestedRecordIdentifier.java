@@ -7,11 +7,11 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Authorization {
+public @interface RequestedRecordIdentifier {
 
-    String[] requiredPermissions();
 
-    String authTokenArgName();
+    String argName();
+
 
 
 }

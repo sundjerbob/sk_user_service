@@ -14,7 +14,7 @@ public class GymManagerController {
     GymManagerServiceApi gymManagerService;
 
 
-    public GymManagerController(GymManagerServiceApi gymManagerService){
+    public GymManagerController(GymManagerServiceApi gymManagerService) {
         this.gymManagerService = gymManagerService;
     }
 
@@ -23,8 +23,6 @@ public class GymManagerController {
         UserDto newUser = gymManagerService.createGymManager(createUserRequest);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
-
-
 
 
 }

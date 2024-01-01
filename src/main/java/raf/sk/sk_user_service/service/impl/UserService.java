@@ -13,7 +13,7 @@ import raf.sk.sk_user_service.dto.response.UpdateUserResponse;
 import raf.sk.sk_user_service.entity_model.User;
 import raf.sk.sk_user_service.object_mapper.UserDtoMapper;
 import raf.sk.sk_user_service.repository.UserRepository;
-import raf.sk.sk_user_service.authorization.jwt_service.JWTServiceApi;
+import raf.sk.sk_user_service.authorization.jwt_service.api.JWTServiceApi;
 import raf.sk.sk_user_service.service.api.UserServiceApi;
 
 import java.util.Optional;
@@ -76,7 +76,9 @@ public class UserService implements UserServiceApi {
 
             // Verify the hashed password
             if (matchRawAndHashed(loginRequest.getPassword(), user.getPassword())) {
-                // Passwords match, proceed with authentication and token generation
+                // Passwords match, proceed with authentication and token generation\
+                System.out.println("User " + usernameToAuthenticate + " login successfully.");
+
                 return new LoginResponse().setJwt(jwtService.generateJWT(user));
             }
             System.out.println("Password does not match for username: " + usernameToAuthenticate);
