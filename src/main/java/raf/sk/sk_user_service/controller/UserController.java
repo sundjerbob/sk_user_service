@@ -6,12 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import raf.sk.sk_user_service.authorization.anotation.Authorization;
-import raf.sk.sk_user_service.authorization.anotation.RequestedRecordIdentifier;
+import raf.sk.sk_user_service.dto.model.UserDto;
+import raf.sk.sk_user_service.dto.request.UpdateUserRequest;
 import raf.sk.sk_user_service.dto.request.LoginRequest;
 import raf.sk.sk_user_service.dto.response.LoginResponse;
-import raf.sk.sk_user_service.dto.request.UpdateUserRequest;
-import raf.sk.sk_user_service.dto.model.UserDto;
-import raf.sk.sk_user_service.dto.response.UpdateUserResponse;
 import raf.sk.sk_user_service.service.api.UserServiceApi;
 
 @RestController
@@ -26,9 +24,12 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = userService.authenticate(loginRequest);
-        return new ResponseEntity<>(loginResponse, loginResponse != null ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+        if (loginResponse == null) {
+            return new ResponseEntity<>("User credentials doesnt match any user from the database.", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
     }
 
     @Authorization(requiredPermissions = "ALL_USER_DATA_ACCESS", authTokenArgName = "authorization")
@@ -40,16 +41,16 @@ public class UserController {
     }
 
 
-    @Authorization(
+    /*@Authorization(
             requiredPermissions = {"ALL_USER_DATA_ACCESS", "PERSONAL_USER_DATA_ACCESS"},
             authTokenArgName = "authorization"
-    )
-    @RequestedRecordIdentifier(argName = "userId")
+    )*/
+    // @RequestedRecordIdentifier(argName = "userId")
     @PutMapping("/{userId}/update")
-    public ResponseEntity<UpdateUserResponse> updateUser(@RequestHeader("Authorization") String authorization,
-                                                         @PathVariable("userId") Long userId,
-                                                         @RequestBody UpdateUserRequest updateDto) {
-        return new ResponseEntity<>(userService.updateUser(userId, updateDto), HttpStatus.OK);
+    public ResponseEntity<Object> updateUser(@RequestHeader("Authorization") String authorization,
+                                             @PathVariable("userId") Long userId,
+                                             @RequestBody UpdateUserRequest updateDto) {
+        return new ResponseEntity<>("Sashimi sako + " + userId, HttpStatus.OK);
     }
 
 

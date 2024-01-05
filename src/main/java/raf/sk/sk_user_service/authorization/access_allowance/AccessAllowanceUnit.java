@@ -45,6 +45,7 @@ public class AccessAllowanceUnit {
 
         // Unpack the requester claims using jwtServiceApi
         UnpackedAuthToken requesterClaims = jwtServiceApi.unpackClaimsInfo(requesterClaimsToken);
+        System.out.println(requestedRecordId);
         /* test */
         System.out.println(requesterClaims);
 

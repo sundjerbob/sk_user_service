@@ -19,7 +19,6 @@ import static raf.sk.sk_user_service.object_mapper.UserDtoMapper.createReqToUser
 
 
 @Service
-@Transactional
 public class GymManagerService implements GymManagerServiceApi {
 
 
@@ -33,6 +32,7 @@ public class GymManagerService implements GymManagerServiceApi {
 
 
     @Override
+    @Transactional
     public UserDto createGymManager(CreateUserRequest createUserRequest) {
 
 

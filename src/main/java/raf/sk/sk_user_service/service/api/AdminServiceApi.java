@@ -9,5 +9,5 @@ public interface AdminServiceApi {
 
     UserDto createAdmin(@Valid CreateUserRequest createUserRequest);
 
-    boolean setDisabled(long userId, boolean isDisabled);
+    boolean setDisabled(Long userId, boolean isDisabled);
 }

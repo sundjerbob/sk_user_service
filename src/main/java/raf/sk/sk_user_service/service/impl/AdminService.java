@@ -3,11 +3,11 @@ package raf.sk.sk_user_service.service.impl;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import raf.sk.sk_user_service.dto.request.CreateUserRequest;
 import raf.sk.sk_user_service.dto.model.UserDto;
+import raf.sk.sk_user_service.dto.request.CreateUserRequest;
 import raf.sk.sk_user_service.entity_model.Admin;
-import raf.sk.sk_user_service.entity_model.User;
 import raf.sk.sk_user_service.entity_model.Role;
+import raf.sk.sk_user_service.entity_model.User;
 import raf.sk.sk_user_service.object_mapper.UserDtoMapper;
 import raf.sk.sk_user_service.repository.AdminRepository;
 import raf.sk.sk_user_service.repository.UserRepository;
@@ -15,8 +15,8 @@ import raf.sk.sk_user_service.service.api.AdminServiceApi;
 
 import java.util.Optional;
 
-import static raf.sk.sk_user_service.service.impl.util.PasswordHashingUtil.hashPassword;
 import static raf.sk.sk_user_service.object_mapper.UserDtoMapper.createReqToUser;
+import static raf.sk.sk_user_service.service.impl.util.PasswordHashingUtil.hashPassword;
 
 
 @Service
@@ -59,7 +59,8 @@ public class AdminService implements AdminServiceApi {
     }
 
     @Override
-    public boolean setDisabled(long userId, boolean isDisabled) {
+    @Transactional
+    public boolean setDisabled(Long userId, boolean isDisabled) {
 
         switch (userRepository.setDisabledState(userId, isDisabled)) {
             case 1 -> {
@@ -70,9 +71,6 @@ public class AdminService implements AdminServiceApi {
             default ->
                     throw new RuntimeException("Case of multiple users with id + " + userId + " shouldn't happen... 0,o'");
         }
-
-
-
     }
 
 }

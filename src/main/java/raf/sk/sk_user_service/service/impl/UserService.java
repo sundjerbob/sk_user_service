@@ -66,10 +66,8 @@ public class UserService implements UserServiceApi {
 
     @Override
     public LoginResponse authenticate(LoginRequest loginRequest) {
-        String usernameToAuthenticate = loginRequest.getUsername();
-        System.out.println("Attempting authentication for username: " + usernameToAuthenticate);
 
-        Optional<User> userOptional = userRepository.findByUsername(usernameToAuthenticate);
+        Optional<User> userOptional = userRepository.findByUsername(loginRequest.getUsername());
 
         if (userOptional.isPresent()) {
             User user = userOptional.get();
@@ -77,11 +75,9 @@ public class UserService implements UserServiceApi {
             // Verify the hashed password
             if (matchRawAndHashed(loginRequest.getPassword(), user.getPassword())) {
                 // Passwords match, proceed with authentication and token generation\
-                System.out.println("User " + usernameToAuthenticate + " login successfully.");
 
                 return new LoginResponse().setJwt(jwtService.generateJWT(user));
             }
-            System.out.println("Password does not match for username: " + usernameToAuthenticate);
         }
 
         // Authentication failed

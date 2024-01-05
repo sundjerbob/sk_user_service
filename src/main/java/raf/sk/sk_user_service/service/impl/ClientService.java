@@ -1,6 +1,7 @@
 package raf.sk.sk_user_service.service.impl;
 
 import jakarta.validation.Valid;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raf.sk.sk_user_service.dto.request.CreateUserRequest;
@@ -11,9 +12,12 @@ import raf.sk.sk_user_service.entity_model.User;
 import raf.sk.sk_user_service.entity_model.Role;
 import raf.sk.sk_user_service.object_mapper.UserDtoMapper;
 import raf.sk.sk_user_service.repository.ClientRepository;
+import raf.sk.sk_user_service.repository.MemberCardRepository;
 import raf.sk.sk_user_service.repository.UserRepository;
 import raf.sk.sk_user_service.service.api.ClientServiceApi;
 
+import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.Optional;
 
 import static raf.sk.sk_user_service.service.impl.util.PasswordHashingUtil.hashPassword;
@@ -21,16 +25,16 @@ import static raf.sk.sk_user_service.object_mapper.UserDtoMapper.createReqToUser
 
 
 @Service
-@Transactional
 public class ClientService implements ClientServiceApi {
     private final ClientRepository clientRepository;
-
-
     private final UserRepository userRepository;
 
-    public ClientService(ClientRepository clientRepository, UserRepository userRepository) {
+    private final MemberCardRepository memberCardRepository;
+
+    public ClientService(ClientRepository clientRepository, UserRepository userRepository, MemberCardRepository memberCardRepository) {
         this.clientRepository = clientRepository;
         this.userRepository = userRepository;
+        this.memberCardRepository = memberCardRepository;
     }
 
     @Override
@@ -56,15 +60,18 @@ public class ClientService implements ClientServiceApi {
 
         // client is initially enabled so disabled is false
         client.setDisabled(false);
-
         // hash the password before storing inside db
         client.setPassword(hashPassword(client.getPassword()));
-        client.setDisabled(false);
+        MemberCard memberCard1 = memberCardRepository.save(new MemberCard().setDurationInDays(30));
 
-        client.addMemberCard(new MemberCard());
+        MemberCard memberCard2 = memberCardRepository.save(new MemberCard().setDurationInDays(60).setStartingDate(new Date()));
+        client.addMemberCard(memberCard1);
+        client.addMemberCard(memberCard2);
+
         client = clientRepository.save(client);
 
         return new CreateUserResponse(UserDtoMapper.userToDto(client));
 
     }
+
 }

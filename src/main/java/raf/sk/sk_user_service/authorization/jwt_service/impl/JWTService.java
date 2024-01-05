@@ -36,7 +36,7 @@ public class JWTService implements JWTServiceApi {
         Map<String, String> map = new HashMap<>();
 
         map.put("role", user.getRole().name());
-        map.put("status", user.isDisabled() ? "ACTIVE" : "DEACTIVATED");
+        map.put("status", user.isDisabled() ?  "DEACTIVATED":  "ACTIVE");
 
         claims.putAll(map);
 

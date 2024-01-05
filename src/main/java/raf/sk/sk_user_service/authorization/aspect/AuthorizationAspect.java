@@ -28,7 +28,7 @@ public class AuthorizationAspect {
     private final AccessAllowanceUnit allowanceUnit;
     private final String unauthenticatedRequesterMessage = """
             Usage of this method is authorized.
-            There was no requester identity data inside received Http requests Authorization header."
+            Requester claims data could not be extracted from received Http requests Authorization header."
             Please login with your credentials, in order to gain access.
                 
             """;
@@ -45,7 +45,7 @@ public class AuthorizationAspect {
 
         String jwt = ArgumentExtractionUtil.getAuthArg(joinPoint, authorization.authTokenArgName());
 
-        if (jwt == null || ! jwt.startsWith("Bearer"))
+        if (jwt == null)
             return new ResponseEntity<>(unauthenticatedRequesterMessage, HttpStatus.UNAUTHORIZED);
 
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
@@ -53,11 +53,11 @@ public class AuthorizationAspect {
 
         RequestedRecordIdentifier recordIdentifier = method.getAnnotation(RequestedRecordIdentifier.class);
 
-
-        if (allowanceUnit.allowAction(jwt, recordIdentifier == null ?
-                        null : ArgumentExtractionUtil.getRequestedRecordArg(joinPoint, recordIdentifier.argName()),
-                allowedPermissions
-        ))
+        if (recordIdentifier != null) {
+            System.out.println("DEBUG I LOG: " + recordIdentifier.argName());
+            Object smt = ArgumentExtractionUtil.getRequestedRecordArg(joinPoint, recordIdentifier.argName());
+            System.out.println("DEBUG II LOG: " + smt);
+        } else
             return joinPoint.proceed();
 
 
