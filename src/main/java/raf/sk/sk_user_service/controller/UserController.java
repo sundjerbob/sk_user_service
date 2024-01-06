@@ -10,6 +10,7 @@ import raf.sk.sk_user_service.dto.model.UserDto;
 import raf.sk.sk_user_service.dto.request.UpdateUserRequest;
 import raf.sk.sk_user_service.dto.request.LoginRequest;
 import raf.sk.sk_user_service.dto.response.LoginResponse;
+import raf.sk.sk_user_service.dto.response.UpdateUserResponse;
 import raf.sk.sk_user_service.service.api.UserServiceApi;
 
 @RestController
@@ -47,10 +48,11 @@ public class UserController {
     )*/
     // @RequestedRecordIdentifier(argName = "userId")
     @PutMapping("/{userId}/update")
-    public ResponseEntity<Object> updateUser(@RequestHeader("Authorization") String authorization,
+    public ResponseEntity<UpdateUserResponse> updateUser(@RequestHeader("Authorization") String authorization,
                                              @PathVariable("userId") Long userId,
                                              @RequestBody UpdateUserRequest updateDto) {
-        return new ResponseEntity<>("Sashimi sako + " + userId, HttpStatus.OK);
+        UpdateUserResponse  response = userService.updateUser(userId, updateDto);
+        return new ResponseEntity<>(response, response == null? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
 
 
