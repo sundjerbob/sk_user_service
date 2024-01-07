@@ -10,7 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static raf.sk.sk_user_service.authorization.perm.Permissions.*;
+import static raf.sk.sk_user_service.authorization.perm.Permissions.ALL_USER_DATA_ACCESS;
+import static raf.sk.sk_user_service.authorization.perm.Permissions.PERSONAL_USER_DATA_ACCESS;
 
 @Component
 public class AccessAllowanceUnit {
@@ -35,6 +36,7 @@ public class AccessAllowanceUnit {
                 PERSONAL_USER_DATA_ACCESS,
                 (claims, id) ->
                         claims.getRequesterRole().getPermissions().contains(PERSONAL_USER_DATA_ACCESS)
+                                && id != null
                                 && id.equals(claims.getRequesterId())
         );
 
@@ -43,16 +45,13 @@ public class AccessAllowanceUnit {
 
     public boolean allowAction(String requesterClaimsToken, Long requestedRecordId, List<Permissions> requiredPermissions) {
 
-        // Unpack the requester claims using jwtServiceApi
         UnpackedAuthToken requesterClaims = jwtServiceApi.unpackClaimsInfo(requesterClaimsToken);
         System.out.println(requestedRecordId);
-        /* test */
+
         System.out.println(requesterClaims);
 
-        // perform supported access permission checks for requiredPermissions
         for (Permissions reqPerm : requiredPermissions) {
             System.out.println("Permission: " + reqPerm + " acquire check for requester: " + requesterClaims.getRequesterUsername());
-            // if access permission check grants access the action is allowed
             if (permissionChecks.get(reqPerm).grantAccess(requesterClaims, requestedRecordId)) {
                 System.out.println("Requester: " + requesterClaims.getRequesterUsername() + " has permission: " + reqPerm + ".\nAccess is granted.");
                 return true;

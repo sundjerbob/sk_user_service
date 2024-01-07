@@ -8,4 +8,6 @@ import raf.sk.sk_user_service.dto.response.CreateUserResponse;
 public interface ClientServiceApi {
     CreateUserResponse createClient(@Valid CreateUserRequest createUserRequest);
 
+
+
 }

@@ -1,16 +1,15 @@
 package raf.sk.sk_user_service.object_mapper;
 
+import raf.sk.sk_user_service.dto.model.*;
 import raf.sk.sk_user_service.dto.request.CreateUserRequest;
-import raf.sk.sk_user_service.dto.model.AdminDto;
-import raf.sk.sk_user_service.dto.model.GymManagerDto;
-import raf.sk.sk_user_service.dto.model.ClientDto;
-
-import raf.sk.sk_user_service.dto.model.UserDto;
 import raf.sk.sk_user_service.entity_model.Client;
 import raf.sk.sk_user_service.entity_model.GymManager;
+import raf.sk.sk_user_service.entity_model.MembershipCard;
 import raf.sk.sk_user_service.entity_model.User;
 
-public class UserDtoMapper {
+import java.util.List;
+
+public class UserObjectMapper {
 
 
     public static UserDto userToDto(User user) {
@@ -37,7 +36,7 @@ public class UserDtoMapper {
                                     .role(user.getRole()))
 
                     .gymName(((GymManager) user).getGymName())
-                    //.setDateOfEmployment(((GymManager) user).getDateOfEmployment().toString())
+                    .setDateOfEmployment(((GymManager) user).getDateOfEmployment().toString())
                     .build();
 
 
@@ -49,13 +48,24 @@ public class UserDtoMapper {
                                     .firstName(user.getFirstName())
                                     .lastName(user.getLastName())
                                     .role(user.getRole()))
-                    // .memberCardNumber(((Client) user).getMemberCardNumber())
+                    .memberCards(cardsToCardsDto(((Client) user).getMemberCards()))
                     .scheduledTrainings(((Client) user).getScheduledTrainings())
                     .build();
         };
     }
 
-    public static void createReqToUser(CreateUserRequest createUserRequest, User user) {
+    private static List<MembershipCardDto> cardsToCardsDto(List<MembershipCard> cards) {
+        return cards.stream().map(card -> {
+            MembershipCardDto cardDto = new MembershipCardDto();
+            cardDto.setDurationInDays(card.getDurationInDays());
+            cardDto.setStartingDate(card.getStartingDate());
+            return cardDto;
+        }).toList();
+    }
+
+    ;
+
+    public static User createReqToUser(CreateUserRequest createUserRequest, User user) {
         user.setEmail(createUserRequest.getEmail());
         user.setUsername(createUserRequest.getUsername());
         user.setFirstName(createUserRequest.getFirstName());
@@ -63,6 +73,7 @@ public class UserDtoMapper {
         user.setPassword(createUserRequest.getPassword());
         user.setDateOfBirth(createUserRequest.getDateOfBirth());
         user.setRole(createUserRequest.getRole());
+        return user;
     }
 
 

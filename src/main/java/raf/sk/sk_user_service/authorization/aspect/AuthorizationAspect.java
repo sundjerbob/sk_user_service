@@ -49,19 +49,23 @@ public class AuthorizationAspect {
             return new ResponseEntity<>(unauthenticatedRequesterMessage, HttpStatus.UNAUTHORIZED);
 
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
-        List<Permissions> allowedPermissions = Arrays.stream(authorization.requiredPermissions()).map(Permissions::valueOf).toList();
+
+        List<Permissions> requiredPermissions = Arrays.stream(authorization.requiredPermissions()).map(Permissions::valueOf).toList();
 
         RequestedRecordIdentifier recordIdentifier = method.getAnnotation(RequestedRecordIdentifier.class);
 
-        if (recordIdentifier != null) {
-            System.out.println("DEBUG I LOG: " + recordIdentifier.argName());
-            Object smt = ArgumentExtractionUtil.getRequestedRecordArg(joinPoint, recordIdentifier.argName());
-            System.out.println("DEBUG II LOG: " + smt);
-        } else
-            return joinPoint.proceed();
+        Long recordId = recordIdentifier != null ?
+                ArgumentExtractionUtil.getRequestedRecordArg(joinPoint, recordIdentifier.argName()) : null;
 
+        try {
+            if (allowanceUnit.allowAction(jwt, recordId, requiredPermissions))
+                return joinPoint.proceed();
+            else
+                return new ResponseEntity<>(accessDeniedMessage, HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
 
-        return new ResponseEntity<>(accessDeniedMessage, HttpStatus.FORBIDDEN);
     }
 
 

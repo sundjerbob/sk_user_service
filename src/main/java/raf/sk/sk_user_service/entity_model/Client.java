@@ -10,27 +10,27 @@ import java.util.List;
 public class Client extends User {
 
     public Client() {
-        memberCards = new ArrayList<>();
+        membershipCards = new ArrayList<>();
     }
 
-    @JoinColumn(name = "member_cards")
-    @OneToMany
-    private List<MemberCard> memberCards;
+    @JoinColumn(referencedColumnName = "id", name = "owner_fk")
+    @OneToMany(targetEntity = MembershipCard.class, cascade = CascadeType.ALL)
+    private List<MembershipCard> membershipCards;
 
     @Column(name = "scheduled_trainings", nullable = false)
     private int scheduledTrainings;
 
 
-    public void setMemberCards(List<MemberCard> memberCards) {
-        this.memberCards = memberCards;
+    public void setMemberCards(List<MembershipCard> membershipCards) {
+        this.membershipCards = membershipCards;
     }
 
-    public List<MemberCard> getMemberCards() {
-        return memberCards;
+    public List<MembershipCard> getMemberCards() {
+        return membershipCards;
     }
 
-    public void addMemberCard(MemberCard memberCard) {
-        memberCards.add(memberCard);
+    public void addMemberCard(MembershipCard membershipCard) {
+        membershipCards.add(membershipCard);
     }
 
 

@@ -8,14 +8,14 @@ import raf.sk.sk_user_service.dto.request.CreateUserRequest;
 import raf.sk.sk_user_service.entity_model.Admin;
 import raf.sk.sk_user_service.entity_model.Role;
 import raf.sk.sk_user_service.entity_model.User;
-import raf.sk.sk_user_service.object_mapper.UserDtoMapper;
+import raf.sk.sk_user_service.object_mapper.UserObjectMapper;
 import raf.sk.sk_user_service.repository.AdminRepository;
 import raf.sk.sk_user_service.repository.UserRepository;
 import raf.sk.sk_user_service.service.api.AdminServiceApi;
 
 import java.util.Optional;
 
-import static raf.sk.sk_user_service.object_mapper.UserDtoMapper.createReqToUser;
+import static raf.sk.sk_user_service.object_mapper.UserObjectMapper.createReqToUser;
 import static raf.sk.sk_user_service.service.impl.util.PasswordHashingUtil.hashPassword;
 
 
@@ -55,7 +55,7 @@ public class AdminService implements AdminServiceApi {
 
         admin = adminRepository.save(admin);
 
-        return UserDtoMapper.userToDto(admin);
+        return UserObjectMapper.userToDto(admin);
     }
 
     @Override

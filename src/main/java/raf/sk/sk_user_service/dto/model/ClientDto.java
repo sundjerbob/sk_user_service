@@ -1,15 +1,18 @@
 package raf.sk.sk_user_service.dto.model;
 
+import java.util.List;
+
 public class ClientDto extends UserDto {
 
-    private long memberCardNumber;
     private int scheduledTrainings;
+
+    private List<MembershipCardDto> membershipCards;
 
     private ClientDto() {
     }
 
-    public long getMemberCardNumber() {
-        return memberCardNumber;
+    public List<MembershipCardDto> getMembershipCards() {
+        return membershipCards;
     }
 
 
@@ -19,7 +22,8 @@ public class ClientDto extends UserDto {
 
     // Builder pattern
     public static class Builder extends UserDto.Builder {
-        private long memberCardNumber;
+
+        private List<MembershipCardDto> membershipCards;
         private int scheduledTrainings;
 
 
@@ -27,8 +31,8 @@ public class ClientDto extends UserDto {
 
         }
 
-        public Builder memberCardNumber(long memberCardNumber) {
-            this.memberCardNumber = memberCardNumber;
+        public Builder memberCards(List<MembershipCardDto> cards) {
+            this.membershipCards = cards;
             return this;
         }
 
@@ -37,9 +41,6 @@ public class ClientDto extends UserDto {
             return this;
         }
 
-        public void setMemberCard(long memberCard) {
-            this.memberCardNumber = memberCard;
-        }
 
         public ClientDto build() {
             ClientDto clientDto = new ClientDto();
@@ -50,10 +51,8 @@ public class ClientDto extends UserDto {
             clientDto.dateOfBirth = dateOfBirth;
             clientDto.role = role;
             clientDto.disabled = disabled;
-
-            clientDto.memberCardNumber = this.memberCardNumber;
+            clientDto.membershipCards = this.membershipCards;
             clientDto.scheduledTrainings = this.scheduledTrainings;
-
             return clientDto;
         }
     }

@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "member_cards")
-public class MemberCard {
+@Table(name = "membership_cards")
+public class MembershipCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,13 +18,21 @@ public class MemberCard {
     @Column(name = "duration_in_days")
     private int durationInDays;
 
-    public MemberCard setDurationInDays(int durationInDays) {
+    public MembershipCard setDurationInDays(int durationInDays) {
         this.durationInDays = durationInDays;
         return this;
     }
 
-    public MemberCard setStartingDate(Date startingDate) {
+    public MembershipCard setStartingDate(Date startingDate) {
         this.startingDate = startingDate;
         return this;
+    }
+
+    public Date getStartingDate() {
+        return startingDate;
+    }
+
+    public int getDurationInDays() {
+        return durationInDays;
     }
 }

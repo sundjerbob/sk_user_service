@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import raf.sk.sk_user_service.dto.request.CreateUserRequest;
-import raf.sk.sk_user_service.dto.model.UserDto;
+import raf.sk.sk_user_service.dto.request.NewMembershipRequest;
 import raf.sk.sk_user_service.dto.response.CreateUserResponse;
 import raf.sk.sk_user_service.service.api.ClientServiceApi;
 
@@ -26,4 +26,10 @@ public class ClientController {
 
         return new ResponseEntity<>(clientService.createClient(createUserRequest), HttpStatus.CREATED);
     }
+
+    @PostMapping("/aa")
+    public ResponseEntity<NewMembershipRequest> startNewMembership() {
+        return null;
+    }
+
 }
