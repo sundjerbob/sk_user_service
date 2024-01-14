@@ -9,7 +9,7 @@ import raf.sk.sk_user_service.entity_model.User;
 
 import java.util.List;
 
-public class UserObjectMapper {
+public class ObjectMapper {
 
 
     public static UserDto userToDto(User user) {
