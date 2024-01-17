@@ -48,19 +48,13 @@ public class ObjectMapper {
                                     .firstName(user.getFirstName())
                                     .lastName(user.getLastName())
                                     .role(user.getRole()))
-                    .memberCards(cardsToCardsDto(((Client) user).getMemberCards()))
-                    .scheduledTrainings(((Client) user).getScheduledTrainings())
+                    .memberCards(membershipCardsToCardsDto(((Client) user).getMemberCards()))
                     .build();
         };
     }
 
-    private static List<MembershipCardDto> cardsToCardsDto(List<MembershipCard> cards) {
-        return cards.stream().map(card -> {
-            MembershipCardDto cardDto = new MembershipCardDto();
-            cardDto.setDurationInDays(card.getDurationInDays());
-            cardDto.setStartingDate(card.getStartingDate());
-            return cardDto;
-        }).toList();
+    private static List<MembershipCardDto> membershipCardsToCardsDto(List<MembershipCard> cards) {
+        return cards.stream().map(ObjectMapper::membershipCardToDto).toList();
     }
 
 

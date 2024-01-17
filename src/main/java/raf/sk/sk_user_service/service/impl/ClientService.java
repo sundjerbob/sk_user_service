@@ -61,9 +61,9 @@ public class ClientService implements ClientServiceApi {
         client.setDisabled(false);
         // hash the password before storing inside db
         client.setPassword(hashPassword(client.getPassword()));
-        MembershipCard membershipCard1 = memberCardRepository.save(new MembershipCard().setDurationInDays(30));
 
-        client.addMemberCard(membershipCard1);
+        // MembershipCard membershipCard1 = memberCardRepository.save(new MembershipCard().setDurationInDays(30));
+        // client.addMemberCard(membershipCard1); TODO: THIS WAS A TEST FOR ADDING CARDS REFERENCES
 
         client = clientRepository.save(client);
 
@@ -85,7 +85,7 @@ public class ClientService implements ClientServiceApi {
         int totalBookedWorkoutsInGym = 0;
 
         for (MembershipCard membershipCard : client.getMemberCards()) {
-            if (membershipCard.getGymName().equals(gymName)) {
+            if (membershipCard.getGymName().equals(gymName) && membershipCard.isActive()) {
                 if (!hasMembershipInGym)
                     hasMembershipInGym = true;
                 totalBookedWorkoutsInGym += membershipCard.getBookedWorkouts();
@@ -94,8 +94,8 @@ public class ClientService implements ClientServiceApi {
 
         if (hasMembershipInGym)
             return new UserPerks().setBookedWorkouts(totalBookedWorkoutsInGym);
-        else
-            return null;
+
+        return null;
     }
 
     @Override

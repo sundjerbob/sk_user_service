@@ -24,6 +24,14 @@ public class MembershipCard {
     @Column(name = "bookedWorkouts")
     private Integer bookedWorkouts;
 
+
+    public boolean isActive() {
+        LocalDate expireDate = startingDate.plusDays(durationInDays);
+        LocalDate currentDate = LocalDate.now();
+        return currentDate.isBefore(expireDate);
+    }
+
+
     public Long getId() {
         return id;
     }

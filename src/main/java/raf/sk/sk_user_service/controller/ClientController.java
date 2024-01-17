@@ -44,4 +44,5 @@ public class ClientController {
         UserPerks userPerks = clientService.getUserPerks(userId, gymName);
         return userPerks != null ? ResponseEntity.ok(userPerks) : ResponseEntity.notFound().build();
     }
+
 }
