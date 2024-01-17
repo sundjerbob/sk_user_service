@@ -1,6 +1,5 @@
 package raf.sk.sk_user_service.service.impl;
 
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raf.sk.sk_user_service.authorization.roles.Role;
@@ -10,7 +9,7 @@ import raf.sk.sk_user_service.dto.response.CreateUserResponse;
 import raf.sk.sk_user_service.entity_model.Client;
 import raf.sk.sk_user_service.entity_model.MembershipCard;
 import raf.sk.sk_user_service.entity_model.User;
-import raf.sk.sk_user_service.inter_service_comunication.UserPerks;
+import raf.sk.sk_user_service.inter_service_comunication.UserPerksDto;
 import raf.sk.sk_user_service.object_mapper.ObjectMapper;
 import raf.sk.sk_user_service.repository.ClientRepository;
 import raf.sk.sk_user_service.repository.MemberCardRepository;
@@ -39,7 +38,7 @@ public class ClientService implements ClientServiceApi {
 
     @Override
     @Transactional
-    public CreateUserResponse createClient(@Valid CreateUserRequest createUserRequest) {
+    public CreateUserResponse createClient(CreateUserRequest createUserRequest) {
 
         if (createUserRequest.getRole() != Role.CLIENT)
             throw new RuntimeException("Invalid body for create client...");
@@ -72,7 +71,7 @@ public class ClientService implements ClientServiceApi {
     }
 
     @Override
-    public UserPerks getUserPerks(Long userId, String gymName) {
+    public UserPerksDto getUserPerks(Long userId, String gymName) {
 
         Optional<User> clientOptional = clientRepository.findById(userId);
 
@@ -84,7 +83,7 @@ public class ClientService implements ClientServiceApi {
         boolean hasMembershipInGym = false;
         int totalBookedWorkoutsInGym = 0;
 
-        for (MembershipCard membershipCard : client.getMemberCards()) {
+        for (MembershipCard membershipCard : client.getMembershipCards()) {
             if (membershipCard.getGymName().equals(gymName) && membershipCard.isActive()) {
                 if (!hasMembershipInGym)
                     hasMembershipInGym = true;
@@ -93,7 +92,7 @@ public class ClientService implements ClientServiceApi {
         }
 
         if (hasMembershipInGym)
-            return new UserPerks().setBookedWorkouts(totalBookedWorkoutsInGym);
+            return new UserPerksDto().setBookedWorkouts(totalBookedWorkoutsInGym);
 
         return null;
     }
@@ -116,8 +115,33 @@ public class ClientService implements ClientServiceApi {
         // update database
         clientRepository.save(client);
 
-
         return ObjectMapper.membershipCardToDto(membershipCard);
+    }
+
+    @Override
+    public boolean incrementBookedWorkouts(Long clientId, String gymName) {
+        Optional<User> userOptional = clientRepository.findById(clientId);
+
+        if (userOptional.isEmpty())
+            return false;
+        Client client = (Client) userOptional.get();
+
+        MembershipCard targetCard = null;
+
+        for (MembershipCard card : client.getMembershipCards()) {
+            if (card.getGymName().equals(gymName) && card.isActive()) {
+                if (targetCard == null)
+                    targetCard = card;
+                else if (card.getStartingDate().isAfter(targetCard.getStartingDate()))
+                    targetCard = card;
+            }
+        }
+
+        if (targetCard == null)
+            return false;
+
+        targetCard.setBookedWorkouts(targetCard.getBookedWorkouts() + 1);
+        return true;
 
     }
 

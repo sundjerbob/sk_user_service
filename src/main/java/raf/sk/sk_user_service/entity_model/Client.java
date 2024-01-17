@@ -23,7 +23,7 @@ public class Client extends User {
         this.membershipCards = membershipCards;
     }
 
-    public List<MembershipCard> getMemberCards() {
+    public List<MembershipCard> getMembershipCards() {
         return membershipCards;
     }
 

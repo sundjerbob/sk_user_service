@@ -72,6 +72,7 @@ public class MembershipCard {
         return bookedWorkouts;
     }
 
+
     public void setBookedWorkouts(Integer bookedWorkouts) {
         this.bookedWorkouts = bookedWorkouts;
     }

@@ -1,6 +1,5 @@
 package raf.sk.sk_user_service.service.impl;
 
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raf.sk.sk_user_service.dto.model.UserDto;
@@ -31,7 +30,7 @@ public class AdminService implements AdminServiceApi {
 
     @Override
     @Transactional
-    public UserDto createAdmin(@Valid CreateUserRequest createUserRequest) {
+    public UserDto createAdmin(CreateUserRequest createUserRequest) {
 
         if (createUserRequest.getRole() != Role.ADMIN)
             throw new RuntimeException("Invalid body for create admin...");

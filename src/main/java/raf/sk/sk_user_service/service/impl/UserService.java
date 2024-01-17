@@ -1,8 +1,9 @@
 package raf.sk.sk_user_service.service.impl;
 
-import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raf.sk.sk_user_service.authorization.jwt_service.api.JWTServiceApi;
@@ -28,15 +29,20 @@ public class UserService implements UserServiceApi {
 
     private final UserRepository userRepository;
     private final JWTServiceApi jwtService;
+    private final JmsTemplate jmsTemplate;
+
+    @Value("${destination.sendNotification}")
+    private String notificationListenerQue;
 
 
-    public UserService(UserRepository userRepository, JWTServiceApi jwtService) {
+    public UserService(UserRepository userRepository, JWTServiceApi jwtService, JmsTemplate jmsTemplate) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
+        this.jmsTemplate = jmsTemplate;
     }
 
     @Override
-    public Page<UserDto> getUsers(@Valid Pageable pageable) {
+    public Page<UserDto> getUsers(Pageable pageable) {
         return userRepository.findAll(pageable)
                 .map(ObjectMapper::userToDto);
     }

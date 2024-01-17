@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import raf.sk.sk_user_service.dto.model.MembershipCardDto;
 import raf.sk.sk_user_service.dto.request.CreateUserRequest;
 import raf.sk.sk_user_service.dto.response.CreateUserResponse;
-import raf.sk.sk_user_service.inter_service_comunication.UserPerks;
+import raf.sk.sk_user_service.inter_service_comunication.UserPerksDto;
 import raf.sk.sk_user_service.service.api.ClientServiceApi;
 
 @RestController
@@ -37,12 +37,12 @@ public class ClientController {
     }
 
     @GetMapping("/getPerks")
-    public ResponseEntity<UserPerks> getPerks(@PathParam("userId") Long userId,
-                                              @PathParam("gymName") String gymName,
-                                              @RequestHeader("Authorization") String authorization) {
+    public ResponseEntity<UserPerksDto> getPerks(@PathParam("userId") Long userId,
+                                                 @PathParam("gymName") String gymName,
+                                                 @RequestHeader("Authorization") String authorization) {
 
-        UserPerks userPerks = clientService.getUserPerks(userId, gymName);
-        return userPerks != null ? ResponseEntity.ok(userPerks) : ResponseEntity.notFound().build();
+        UserPerksDto userPerksDto = clientService.getUserPerks(userId, gymName);
+        return userPerksDto != null ? ResponseEntity.ok(userPerksDto) : ResponseEntity.notFound().build();
     }
 
 }

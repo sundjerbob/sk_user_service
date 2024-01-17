@@ -48,7 +48,7 @@ public class ObjectMapper {
                                     .firstName(user.getFirstName())
                                     .lastName(user.getLastName())
                                     .role(user.getRole()))
-                    .memberCards(membershipCardsToCardsDto(((Client) user).getMemberCards()))
+                    .memberCards(membershipCardsToCardsDto(((Client) user).getMembershipCards()))
                     .build();
         };
     }
