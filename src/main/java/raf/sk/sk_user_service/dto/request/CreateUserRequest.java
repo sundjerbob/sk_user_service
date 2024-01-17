@@ -1,34 +1,23 @@
 package raf.sk.sk_user_service.dto.request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Length;
 import raf.sk.sk_user_service.authorization.roles.Role;
 
 import java.time.LocalDate;
 
 public class CreateUserRequest {
 
-    @Email
     private String email;
 
-    @NotBlank
     private String username;
 
-    @NotBlank
     private String firstName;
 
-    @NotBlank
     private String lastName;
 
-    @Length(min = 8, max = 60)
     private String password;
 
-    @NotNull
     private LocalDate dateOfBirth;
 
-    @NotNull
     private Role role;
 
     public String getEmail() {
