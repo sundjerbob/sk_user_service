@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import raf.sk.sk_user_service.authorization.jwt_service.api.JWTServiceApi;
 import raf.sk.sk_user_service.authorization.jwt_service.dto.UnpackedAuthToken;
-import raf.sk.sk_user_service.entity_model.Role;
+import raf.sk.sk_user_service.authorization.roles.Role;
 import raf.sk.sk_user_service.entity_model.User;
 
 import java.util.Date;
@@ -15,6 +15,11 @@ import java.util.Map;
 
 @Service
 public class JWTService implements JWTServiceApi {
+
+    private final String EMAIL_CLAIM_KEY = "emil";
+    private final String ROLE_CLAIM_KEY = "role";
+    private final String STATUS_CLAIMS_KEY = "status";
+
 
     @Value("${oauth.jwt.secret}")
     private String jwtSecret;
@@ -35,8 +40,9 @@ public class JWTService implements JWTServiceApi {
 
         Map<String, String> map = new HashMap<>();
 
-        map.put("role", user.getRole().name());
-        map.put("status", user.isDisabled() ? "DEACTIVATED" : "ACTIVE");
+        map.put(EMAIL_CLAIM_KEY, user.getEmail());
+        map.put(ROLE_CLAIM_KEY, user.getRole().name());
+        map.put(STATUS_CLAIMS_KEY, user.isDisabled() ? "DEACTIVATED" : "ACTIVE");
 
         claims.putAll(map);
 
@@ -78,10 +84,11 @@ public class JWTService implements JWTServiceApi {
             throw new RuntimeException("Authorization token expired, please login.");
 
         return new UnpackedAuthToken.Builder()
-                .setRequesterUsername(claims.getIssuer())
                 .setRequesterId(Long.parseLong(claims.getId()))
-                .setRequesterRole(Role.valueOf((String) claims.get("role")))
-                .setDisabled(claims.get("status").equals("DEACTIVATED"))
+                .setRequesterUsername(claims.getIssuer())
+                .setRequesterEmail(claims.get(EMAIL_CLAIM_KEY).toString())
+                .setRequesterRole(Role.valueOf((String) claims.get(ROLE_CLAIM_KEY)))
+                .setDisabled(claims.get(STATUS_CLAIMS_KEY).equals("DEACTIVATED"))
                 .setSessionStartTime(claims.getIssuedAt())
                 .setSessionEndTime(claims.getExpiration())
                 .build();

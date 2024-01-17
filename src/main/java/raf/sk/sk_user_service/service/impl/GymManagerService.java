@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import raf.sk.sk_user_service.dto.model.UserDto;
 import raf.sk.sk_user_service.dto.request.CreateUserRequest;
 import raf.sk.sk_user_service.entity_model.GymManager;
-import raf.sk.sk_user_service.entity_model.Role;
+import raf.sk.sk_user_service.authorization.roles.Role;
 import raf.sk.sk_user_service.entity_model.User;
 import raf.sk.sk_user_service.object_mapper.ObjectMapper;
 import raf.sk.sk_user_service.repository.GymManagerRepository;

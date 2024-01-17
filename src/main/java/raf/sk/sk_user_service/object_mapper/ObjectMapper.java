@@ -63,7 +63,6 @@ public class ObjectMapper {
         }).toList();
     }
 
-    ;
 
     public static User createReqToUser(CreateUserRequest createUserRequest, User user) {
         user.setEmail(createUserRequest.getEmail());
@@ -76,5 +75,12 @@ public class ObjectMapper {
         return user;
     }
 
+    public static MembershipCardDto membershipCardToDto(MembershipCard membershipCard) {
+        MembershipCardDto membershipCardDto = new MembershipCardDto();
+        membershipCardDto.setGymName(membershipCard.getGymName());
+        membershipCardDto.setDurationInDays(membershipCard.getDurationInDays());
+        membershipCardDto.setStartingDate(membershipCard.getStartingDate());
+        return membershipCardDto;
+    }
 
 }

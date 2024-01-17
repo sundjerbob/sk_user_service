@@ -17,8 +17,6 @@ public class Client extends User {
     @OneToMany(targetEntity = MembershipCard.class, cascade = CascadeType.ALL)
     private List<MembershipCard> membershipCards;
 
-    @Column(name = "scheduled_trainings", nullable = false)
-    private int scheduledTrainings;
 
 
     public void setMemberCards(List<MembershipCard> membershipCards) {
@@ -34,11 +32,4 @@ public class Client extends User {
     }
 
 
-    public int getScheduledTrainings() {
-        return scheduledTrainings;
-    }
-
-    public void setScheduledTrainings(int scheduledTrainings) {
-        this.scheduledTrainings = scheduledTrainings;
-    }
 }

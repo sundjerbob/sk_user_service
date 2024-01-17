@@ -12,13 +12,13 @@ import raf.sk.sk_user_service.dto.request.UpdateUserRequest;
 import raf.sk.sk_user_service.dto.response.LoginResponse;
 import raf.sk.sk_user_service.dto.response.UpdateUserResponse;
 import raf.sk.sk_user_service.entity_model.User;
-import raf.sk.sk_user_service.object_mapper.UserObjectMapper;
+import raf.sk.sk_user_service.object_mapper.ObjectMapper;
 import raf.sk.sk_user_service.repository.UserRepository;
 import raf.sk.sk_user_service.service.api.UserServiceApi;
 
 import java.util.Optional;
 
-import static raf.sk.sk_user_service.object_mapper.UserObjectMapper.userToDto;
+import static raf.sk.sk_user_service.object_mapper.ObjectMapper.userToDto;
 import static raf.sk.sk_user_service.service.impl.util.PasswordHashingUtil.matchRawAndHashed;
 
 
@@ -38,7 +38,7 @@ public class UserService implements UserServiceApi {
     @Override
     public Page<UserDto> getUsers(@Valid Pageable pageable) {
         return userRepository.findAll(pageable)
-                .map(UserObjectMapper::userToDto);
+                .map(ObjectMapper::userToDto);
     }
 
 

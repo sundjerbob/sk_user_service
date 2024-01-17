@@ -1,14 +1,13 @@
 package raf.sk.sk_user_service.controller;
 
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import raf.sk.sk_user_service.dto.model.MembershipCardDto;
 import raf.sk.sk_user_service.dto.request.CreateUserRequest;
-import raf.sk.sk_user_service.dto.request.NewMembershipRequest;
 import raf.sk.sk_user_service.dto.response.CreateUserResponse;
+import raf.sk.sk_user_service.inter_service_comunication.UserPerks;
 import raf.sk.sk_user_service.service.api.ClientServiceApi;
 
 @RestController
@@ -27,9 +26,22 @@ public class ClientController {
         return new ResponseEntity<>(clientService.createClient(createUserRequest), HttpStatus.CREATED);
     }
 
-    @PostMapping("/aa")
-    public ResponseEntity<NewMembershipRequest> startNewMembership() {
-        return null;
+
+    @PostMapping("/startMembership")
+    public ResponseEntity<MembershipCardDto> startNewMembership(
+            @PathParam("userId") Long userId,
+            @PathParam("gymName") String gymName,
+            @RequestHeader("Authorization") String authorization) {
+        MembershipCardDto newCard = clientService.startNewMembership(userId, gymName);
+        return newCard != null ? ResponseEntity.ok(newCard) : ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/getPerks")
+    public ResponseEntity<UserPerks> getPerks(@PathParam("userId") Long userId,
+                                              @PathParam("gymName") String gymName,
+                                              @RequestHeader("Authorization") String authorization) {
+
+        UserPerks userPerks = clientService.getUserPerks(userId, gymName);
+        return userPerks != null ? ResponseEntity.ok(userPerks) : ResponseEntity.notFound().build();
+    }
 }

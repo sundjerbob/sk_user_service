@@ -2,7 +2,7 @@ package raf.sk.sk_user_service.entity_model;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "membership_cards")
@@ -13,26 +13,58 @@ public class MembershipCard {
     private Long id;
 
     @Column(name = "starting_date")
-    private Date startingDate;
+    private LocalDate startingDate;
 
     @Column(name = "duration_in_days")
     private int durationInDays;
+
+    @Column(name = "gym_name")
+    private String gymName;
+
+    @Column(name = "bookedWorkouts")
+    private Integer bookedWorkouts;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public MembershipCard setDurationInDays(int durationInDays) {
         this.durationInDays = durationInDays;
         return this;
     }
 
-    public MembershipCard setStartingDate(Date startingDate) {
+    public MembershipCard setStartingDate(LocalDate startingDate) {
         this.startingDate = startingDate;
         return this;
     }
 
-    public Date getStartingDate() {
+    public LocalDate getStartingDate() {
         return startingDate;
     }
 
     public int getDurationInDays() {
         return durationInDays;
+    }
+
+    public MembershipCard setGymName(String gymName) {
+        this.gymName = gymName;
+        return this;
+    }
+
+
+    public String getGymName() {
+        return gymName;
+    }
+
+    public Integer getBookedWorkouts() {
+        return bookedWorkouts;
+    }
+
+    public void setBookedWorkouts(Integer bookedWorkouts) {
+        this.bookedWorkouts = bookedWorkouts;
     }
 }

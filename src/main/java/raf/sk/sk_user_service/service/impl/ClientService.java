@@ -3,22 +3,24 @@ package raf.sk.sk_user_service.service.impl;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import raf.sk.sk_user_service.authorization.roles.Role;
+import raf.sk.sk_user_service.dto.model.MembershipCardDto;
 import raf.sk.sk_user_service.dto.request.CreateUserRequest;
 import raf.sk.sk_user_service.dto.response.CreateUserResponse;
 import raf.sk.sk_user_service.entity_model.Client;
 import raf.sk.sk_user_service.entity_model.MembershipCard;
-import raf.sk.sk_user_service.entity_model.Role;
 import raf.sk.sk_user_service.entity_model.User;
-import raf.sk.sk_user_service.object_mapper.UserObjectMapper;
+import raf.sk.sk_user_service.inter_service_comunication.UserPerks;
+import raf.sk.sk_user_service.object_mapper.ObjectMapper;
 import raf.sk.sk_user_service.repository.ClientRepository;
 import raf.sk.sk_user_service.repository.MemberCardRepository;
 import raf.sk.sk_user_service.repository.UserRepository;
 import raf.sk.sk_user_service.service.api.ClientServiceApi;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 
-import static raf.sk.sk_user_service.object_mapper.UserObjectMapper.createReqToUser;
+import static raf.sk.sk_user_service.object_mapper.ObjectMapper.createReqToUser;
 import static raf.sk.sk_user_service.service.impl.util.PasswordHashingUtil.hashPassword;
 
 
@@ -61,13 +63,61 @@ public class ClientService implements ClientServiceApi {
         client.setPassword(hashPassword(client.getPassword()));
         MembershipCard membershipCard1 = memberCardRepository.save(new MembershipCard().setDurationInDays(30));
 
-        MembershipCard membershipCard2 = memberCardRepository.save(new MembershipCard().setDurationInDays(60).setStartingDate(new Date()));
         client.addMemberCard(membershipCard1);
-        client.addMemberCard(membershipCard2);
 
         client = clientRepository.save(client);
 
-        return new CreateUserResponse(UserObjectMapper.userToDto(client));
+        return new CreateUserResponse(ObjectMapper.userToDto(client));
+
+    }
+
+    @Override
+    public UserPerks getUserPerks(Long userId, String gymName) {
+
+        Optional<User> clientOptional = clientRepository.findById(userId);
+
+        if (clientOptional.isEmpty())
+            return null;
+
+        Client client = (Client) clientOptional.get();
+
+        boolean hasMembershipInGym = false;
+        int totalBookedWorkoutsInGym = 0;
+
+        for (MembershipCard membershipCard : client.getMemberCards()) {
+            if (membershipCard.getGymName().equals(gymName)) {
+                if (!hasMembershipInGym)
+                    hasMembershipInGym = true;
+                totalBookedWorkoutsInGym += membershipCard.getBookedWorkouts();
+            }
+        }
+
+        if (hasMembershipInGym)
+            return new UserPerks().setBookedWorkouts(totalBookedWorkoutsInGym);
+        else
+            return null;
+    }
+
+    @Override
+    public MembershipCardDto startNewMembership(Long userId, String gymName) {
+        Optional<User> clientOptional = clientRepository.findById(userId);
+
+        if (clientOptional.isEmpty())
+            return null;
+
+        // adding the card
+        MembershipCard membershipCard = memberCardRepository.save(
+                new MembershipCard().setDurationInDays(30).setStartingDate(LocalDate.now()).setGymName(gymName)
+        );
+
+        Client client = (Client) clientOptional.get();
+        // linking member card to client
+        client.addMemberCard(membershipCard);
+        // update database
+        clientRepository.save(client);
+
+
+        return ObjectMapper.membershipCardToDto(membershipCard);
 
     }
 

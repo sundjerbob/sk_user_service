@@ -29,23 +29,23 @@ public class AccessAllowanceUnit {
 
         permissionChecks.put(
                 ALL_USER_DATA_ACCESS,
-                (claims, id) ->
+                (claims, requestedRecordId) ->
                         claims.getRequesterRole().getPermissions().contains(ALL_USER_DATA_ACCESS));
 
         permissionChecks.put(
                 PERSONAL_USER_DATA_ACCESS,
-                (claims, id) ->
+                (claims, requestedRecordId) ->
                         claims.getRequesterRole().getPermissions().contains(PERSONAL_USER_DATA_ACCESS)
-                                && id != null
-                                && id.equals(claims.getRequesterId())
+                                && requestedRecordId != null
+                                && requestedRecordId.equals(claims.getRequesterId())
         );
-
     }
 
 
     public boolean allowAction(String requesterClaimsToken, Long requestedRecordId, List<Permissions> requiredPermissions) {
 
         UnpackedAuthToken requesterClaims = jwtServiceApi.unpackClaimsInfo(requesterClaimsToken);
+
         System.out.println(requestedRecordId);
 
         System.out.println(requesterClaims);

@@ -1,4 +1,4 @@
-package raf.sk.sk_user_service.entity_model;
+package raf.sk.sk_user_service.authorization.roles;
 
 
 import raf.sk.sk_user_service.authorization.perm.Permissions;

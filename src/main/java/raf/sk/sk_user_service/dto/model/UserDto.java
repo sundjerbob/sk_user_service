@@ -1,7 +1,7 @@
 package raf.sk.sk_user_service.dto.model;
 
 
-import raf.sk.sk_user_service.entity_model.Role;
+import raf.sk.sk_user_service.authorization.roles.Role;
 
 public abstract class UserDto {
 
